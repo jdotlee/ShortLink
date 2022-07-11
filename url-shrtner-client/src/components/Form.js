@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { nanoid } from 'nanoid';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import { Typography } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import Icon from '@mui/material/Icon';
+import { Tooltip, Typography } from '@mui/material';
 import TextField from "@mui/material/TextField";
 import InputAdornment from '@mui/material/InputAdornment';
 import { isWebUri } from 'valid-url';
@@ -105,18 +108,20 @@ const Form = () => {
                     </Box>
                 </Typography>
                 <TextField
+                    required
                     error={errorMessages.longUrl ? true : false}
+                    id="outlined-required"
                     label="Enter Your Long URL"
-                    placeholder="https://...."
+                    placeholder="https://"
+                    InputLabelProps={{ shrink: true }}
                     helperText={errorMessages.longUrl ? errorMessages.longUrl : " "}
                     onChange={(event) => setLongUrl(event.target.value)}
                 />
                 <TextField
                     error={errorMessages.preferedAlias ? true : false}
-                    label="Enter Your Prefered Alias"
                     placeholder="eg. ECQ!YC (optional)"
                     InputProps={{
-                        startAdornment: <InputAdornment position="start">https://ShortLink.com/</InputAdornment>,
+                        startAdornment: <InputAdornment position="start">https://shortlink.com/</InputAdornment>,
                     }}
                     helperText={errorMessages.preferedAlias ? errorMessages.preferedAlias : " "}
                     onChange={(event) => {
@@ -133,26 +138,49 @@ const Form = () => {
                 </Button>
                 {generatedURL && (
 
-                    <Box>
-
-                    <TextField
-                        variant="filled"
-                        value={generatedURL}
-                    />
-                    <Button
-                        margin='normal'
-                        variant="contained"
-                        onClick = {() => {
-                            navigator.clipboard.writeText(generatedURL);
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: "row",
+                            flexGrow: 1,
                         }}
-                        >
-                        Copy
-                    </Button>
+                    >
+                        <TextField
+                            fullWidth
+                            label="Your ShortLink"
+                            sx={{
+                                hegiht: "50px",
+
+                            }}
+                            variant="filled"
+                            value={generatedURL}
+                        // input adornment with copy button 
+                        // InputProps={{
+                        //     endAdornment: <InputAdornment position="end">
+                        //         <Tooltip title="Copy to clipboard">
+                        //             <IconButton
+                        //                 aria-label="Copy to clipboard"
+                        //                 onClick={() => {
+                        //                     navigator.clipboard.writeText(generatedURL);
+                        //                 }
+                        //                 }>
+                        //             </IconButton>
+                        //         </Tooltip>
+                        //     </InputAdornment>,
+                        // }}
+                        />
+                        <Tooltip title="Copy to clipboard">
+
+                            <IconButton
+                                aria-label="delete"
+                                onClick={() => {
+                                    navigator.clipboard.writeText(generatedURL);
+                                }
+                                }>
+                            </IconButton>
+                        </Tooltip>
                     </Box>
-
                 )}
-
-
             </Box >
         </Box>
 
