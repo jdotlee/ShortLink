@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import Icon from '@mui/material/Icon';
 import { Tooltip, Typography } from '@mui/material';
 import TextField from "@mui/material/TextField";
 import InputAdornment from '@mui/material/InputAdornment';
@@ -83,9 +82,13 @@ const Form = () => {
         >
             <Box
                 sx={{
+                    backgroundColor: "white",
                     display: 'flex',
                     flexDirection: 'column',
-                    borderRadius: '5px',
+                    borderRadius: '10px',
+                    padding: '40px',
+                    border: "2px solid #b0bec5",
+
                 }}
             >
                 <Typography
@@ -137,49 +140,30 @@ const Form = () => {
                     Generate ShortLink!
                 </Button>
                 {generatedURL && (
-
-                    <Box
+                    <TextField
+                        fullWidth
+                        label="Your ShortLink"
                         sx={{
-                            display: "flex",
-                            flexDirection: "row",
-                            flexGrow: 1,
+                            hegiht: "50px",
+
                         }}
-                    >
-                        <TextField
-                            fullWidth
-                            label="Your ShortLink"
-                            sx={{
-                                hegiht: "50px",
-
-                            }}
-                            variant="filled"
-                            value={generatedURL}
-                        // input adornment with copy button 
-                        // InputProps={{
-                        //     endAdornment: <InputAdornment position="end">
-                        //         <Tooltip title="Copy to clipboard">
-                        //             <IconButton
-                        //                 aria-label="Copy to clipboard"
-                        //                 onClick={() => {
-                        //                     navigator.clipboard.writeText(generatedURL);
-                        //                 }
-                        //                 }>
-                        //             </IconButton>
-                        //         </Tooltip>
-                        //     </InputAdornment>,
-                        // }}
-                        />
-                        <Tooltip title="Copy to clipboard">
-
-                            <IconButton
-                                aria-label="delete"
-                                onClick={() => {
-                                    navigator.clipboard.writeText(generatedURL);
-                                }
-                                }>
-                            </IconButton>
-                        </Tooltip>
-                    </Box>
+                        variant="filled"
+                        value={generatedURL.toString()}
+                        InputProps={{
+                            endAdornment: <InputAdornment position="end">
+                                <Tooltip title="Copy to clipboard">
+                                    <IconButton
+                                        aria-label="Copy to clipboard"
+                                        onClick={() => {
+                                            navigator.clipboard.writeText(generatedURL);
+                                        }
+                                        }>
+                                        <ContentCopyIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            </InputAdornment>,
+                        }}
+                    />
                 )}
             </Box >
         </Box>
