@@ -47,7 +47,8 @@ const Form = () => {
             alias: alias,
             longUrl: longUrl,
             generatedURL: generatedURL,
-            clicks: 0
+            clicks: 0,
+            user: "user"
         }).then(()=>{
             setLoading(false);
         })
