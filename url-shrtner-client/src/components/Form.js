@@ -6,7 +6,9 @@ import IconButton from '@mui/material/IconButton';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { Tooltip, Typography } from '@mui/material';
 import TextField from "@mui/material/TextField";
+import { getDatabase, child, ref, set, get } from "firebase/database";
 import InputAdornment from '@mui/material/InputAdornment';
+import CircularProgress from '@mui/material/CircularProgress';
 import { isWebUri } from 'valid-url';
 
 
@@ -31,14 +33,24 @@ const Form = () => {
             return;
         }
 
+        var alias = preferedAlias;
         // If user has entered a prefered alias, use it, else generate another one
-        if (preferedAlias) {
-            setGeneratedURL("shortlink.com/" + preferedAlias)
+        if (alias) {
+            setGeneratedURL("shortlink.com/" + alias)
         } else {
-            setGeneratedURL("shortlink.com/" + nanoid(5))
+            alias = nanoid(5);
+            setGeneratedURL("shortlink.com/" + alias)
         }
         // Update DB with the new URL
-        setLoading(false);
+        const db = getDatabase();
+        set(ref(db, '/' + alias), {
+            alias: alias,
+            longUrl: longUrl,
+            generatedURL: generatedURL,
+            clicks: 0
+        }).then(()=>{
+            setLoading(false);
+        })
     };
 
     // Method to validate the form input
@@ -62,6 +74,16 @@ const Form = () => {
         if (preferedAlias && preferedAlias.indexOf(" ") > -1) {
             errors.preferedAlias = "Prefered alias cannot contain spaces";
         }
+
+        //check if the prefered alias is already in use
+        if (preferedAlias) {
+            const db = getDatabase();
+            const checkAlias = await get(ref(db, '/' + preferedAlias));
+            if (checkAlias.exists()) {
+                errors.preferedAlias = "Prefered alias is already in use";
+            }
+        }
+
         setErrorMessages(errors);
         // check if we have no errors
         if (Object.keys(errors).length === 0) {
@@ -69,9 +91,14 @@ const Form = () => {
         }
 
         return false
+
+        
     };
+    
+    
 
     return (
+       
         <Box
             sx={{
                 display: "flex",
